@@ -11,6 +11,10 @@ export default {
   plugins: [
     babel({
       exclude: 'node_modules/**',
+      presets: [
+        ["latest", { es2015: { modules: false } }],
+      ],
+      plugins: ["external-helpers"]
     })
   ],
 };
