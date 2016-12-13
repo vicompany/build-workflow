@@ -1,6 +1,6 @@
 import Base from './base.js';
 
-export default class ExampleComponent {
+export default class ExampleComponent extends Base {
   constructor(element) {
     super(element);
 
