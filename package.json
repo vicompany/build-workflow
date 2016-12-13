@@ -1,1 +1,10 @@
-{}
+{
+  "scripts": {
+    "rollup:build": "rollup -c",
+    "rollup:watch": "rollup -cw 'Source/scripts/**/*'"
+  },
+  "devDependencies": {
+    "rollup": "^0.37.0",
+    "rollup-watch": "^2.5.0"
+  }
+}

@@ -1,4 +1,5 @@
 import Example from './modules/example.js';
+import Unused from './modules/unused.js';
 
 class App {
   constructor() {
@@ -6,4 +7,4 @@ class App {
   }
 }
 
-window.app = new App();
+export default new App();
