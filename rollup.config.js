@@ -1,4 +1,5 @@
 import babel from 'rollup-plugin-babel';
+import uglify from 'rollup-plugin-uglify';
 
 export default {
   dest: 'wwwroot/bundle-rollup.js',
@@ -15,6 +16,7 @@ export default {
         ["latest", { es2015: { modules: false } }],
       ],
       plugins: ["external-helpers"]
-    })
+    }),
+    uglify(),
   ],
 };

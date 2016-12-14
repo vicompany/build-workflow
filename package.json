@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "browserify:build": "browserify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js -v",
+    "build": "gulp & npm run browserify:build & npm run rollup:build",
+    "browserify:build": "browserify -g uglifyify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js",
     "rollup:build": "rollup -c",
     "rollup:watch": "rollup -cw 'Source/scripts/**/*'"
   },
@@ -23,9 +24,12 @@
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
     "gulp": "github:gulpjs/gulp#4.0",
+    "gulp-uglify": "^2.0.0",
     "rollup": "^0.37.0",
     "rollup-plugin-babel": "^2.7.1",
+    "rollup-plugin-uglify": "^1.0.1",
     "rollup-watch": "^2.5.0",
+    "uglifyify": "^3.0.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   }

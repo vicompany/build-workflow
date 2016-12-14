@@ -7,6 +7,7 @@ const babelify = require('babelify');
 
 const DIR_SOURCE = 'Source';
 const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
+const DIR_BUILD = 'wwwroot';
 
 
 /****************************************************************
@@ -16,12 +17,13 @@ const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
 gulp.task('browserify:build', () => {
   const b = browserify({
     entries: `${DIR_SOURCE_SCRIPTS}/app-browserify.js`,
-  });
+  })
+  .transform('uglifyify', { global: true });
 
   return b.bundle()
     .pipe(source('bundle-browserify-gulp.js'))
     .pipe(buffer())
-    .pipe(gulp.dest('wwwroot'));
+    .pipe(gulp.dest(DIR_BUILD));
 });
 
 gulp.task('browserify:watch', gulp.series('browserify:build', () => {
