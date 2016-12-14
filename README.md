@@ -17,6 +17,6 @@ Below are the tools and combinations we wish to test. All of the following combi
 
 - [x] gulp + browserify
 - [ ] gulp + webpack
-- [ ] npm + browserify
+- [x] npm + browserify
 - [x] npm + rollup
 - [ ] npm + webpack
