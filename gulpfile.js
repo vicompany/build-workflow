@@ -3,7 +3,6 @@ const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 
 const browserify = require('browserify');
-const babelify = require('babelify');
 
 const DIR_SOURCE = 'Source';
 const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
