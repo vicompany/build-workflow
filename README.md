@@ -19,4 +19,8 @@ Below are the tools and combinations we wish to test. All of the following combi
 - [ ] gulp + webpack
 - [x] npm + browserify
 - [x] npm + rollup
-- [ ] npm + webpack
+- [x] npm + webpack
+
+## Usage
+
+Run `npm run build` to execute _all_ tasks.
