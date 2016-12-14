@@ -1,4 +1,6 @@
 import babel from 'rollup-plugin-babel';
+import commonJs from 'rollup-plugin-commonjs';
+import nodeResolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 
 export default {
@@ -7,10 +9,11 @@ export default {
   format: 'iife',
   globals: {
     app: 'app',
-    moment: 'moment',
   },
   moduleName: 'app',
   plugins: [
+    nodeResolve(),
+    commonJs(),
     babel({
       exclude: 'node_modules/**',
       presets: [
