@@ -7,6 +7,7 @@ export default {
   format: 'iife',
   globals: {
     app: 'app',
+    moment: 'moment',
   },
   moduleName: 'app',
   plugins: [
