@@ -1,7 +1,20 @@
 {
   "scripts": {
+    "browserify:build": "browserify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js -v",
     "rollup:build": "rollup -c",
     "rollup:watch": "rollup -cw 'Source/scripts/**/*'"
+  },
+  "browserify": {
+    "transform": [
+      [
+        "babelify",
+        {
+          "presets": [
+            "latest"
+          ]
+        }
+      ]
+    ]
   },
   "devDependencies": {
     "babel-plugin-external-helpers": "^6.18.0",

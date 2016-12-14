@@ -16,9 +16,6 @@ const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
 gulp.task('browserify:build', () => {
   const b = browserify({
     entries: `${DIR_SOURCE_SCRIPTS}/app-browserify.js`,
-    transform: [
-      [babelify, { presets: ["latest"] }]
-    ],
   });
 
   return b.bundle()
