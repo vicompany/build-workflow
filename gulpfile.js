@@ -2,10 +2,16 @@ const gulp = require('gulp');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 
+// Script
 const browserify = require('browserify');
+// Style
+const autoprefixer = require('gulp-autoprefixer');
+const minifyCss = require('gulp-cssnano');
+const sass = require('gulp-sass');
 
 const DIR_SOURCE = 'Source';
 const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
+const DIR_SOURCE_STYLES = `${DIR_SOURCE}/styles`;
 const DIR_BUILD = 'wwwroot';
 
 
@@ -31,9 +37,19 @@ gulp.task('browserify:watch', gulp.series('browserify:build', () => {
 
 
 /****************************************************************
- * Generic
+ * Miscellaneous
  ****************************************************************/
 
-gulp.task('default', gulp.parallel('browserify:build'));
+gulp.task('styles', () => {
+  return gulp.src(`${DIR_SOURCE_STYLES}/**/*.scss`)
+    .pipe(sass())
+    .pipe(minifyCss())
+    .pipe(autoprefixer({
+      browsers: ['last 2 versions'],
+    }))
+    .pipe(gulp.dest(DIR_BUILD));
+});
+
+gulp.task('default', gulp.parallel('browserify:build', 'styles'));
 
 
