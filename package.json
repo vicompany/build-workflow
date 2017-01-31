@@ -4,7 +4,7 @@
     "browserify:build": "browserify -g uglifyify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js",
     "rollup:build": "rollup -c",
     "rollup:watch": "rollup -cw 'Source/scripts/**/*'",
-    "webpack:build": "webpack --config webpack.config.js",
+    "webpack:build": "webpack --config webpack.config.js --production",
     "webpack:watch": "webpack --config webpack.config.js --watch"
   },
   "browserify": {
