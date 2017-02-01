@@ -5,10 +5,13 @@ const rename = require('gulp-rename');
 
 // Script
 const browserify = require('browserify');
+const rollup = require('gulp-rollup');
 // Style
 const autoprefixer = require('gulp-autoprefixer');
 const minifyCss = require('gulp-cssnano');
 const sass = require('gulp-sass');
+
+const OPTIONS_ROLLUP = require('./rollup-gulp.config');
 
 const DIR_SOURCE = 'Source';
 const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
@@ -35,6 +38,17 @@ gulp.task('browserify:build', () => {
 gulp.task('browserify:watch', gulp.series('browserify:build', () => {
   gulp.watch(`${DIR_SOURCE_SCRIPTS}/**/*.js`, gulp.series('browserify:build'));
 }));
+
+
+/****************************************************************
+ * Rollup
+ ****************************************************************/
+
+gulp.task('rollup:build', () => {
+  return rollup(OPTIONS_ROLLUP)
+    .pipe(source('app.js'))
+    .pipe(gulp.dest(DIR_BUILD));
+});
 
 
 /****************************************************************
