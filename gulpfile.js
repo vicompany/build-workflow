@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
+const rename = require('gulp-rename');
 
 // Script
 const browserify = require('browserify');
@@ -47,6 +48,7 @@ gulp.task('styles', () => {
     .pipe(autoprefixer({
       browsers: ['last 2 versions'],
     }))
+    .pipe(rename('style-gulp.css'))
     .pipe(gulp.dest(DIR_BUILD));
 });
 

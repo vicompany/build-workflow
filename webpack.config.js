@@ -1,8 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
 module.exports = {
-  entry: path.resolve(__dirname, 'Source/scripts/app.js'),
+  entry: path.resolve(__dirname, 'Source/scripts/app-webpack.js'),
   output: {
     path: path.resolve(__dirname, 'wwwroot'),
     filename: 'bundle-webpack.js',
@@ -12,12 +14,12 @@ module.exports = {
   },
 
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel-loader',
-        query: {
+        options: {
           presets: [
             ['latest', {
               es2015: {
@@ -29,14 +31,30 @@ module.exports = {
           ],
         },
       },
+
+      {
+        test: /\.scss*/,
+        // https://webpack.github.io/docs/stylesheets.html#styles-from-initial-chunks-into-separate-css-output-file
+        use: ExtractTextPlugin.extract([{
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+          },
+        }, {
+          loader: 'sass-loader',
+        }]),
+      },
     ],
   },
 
   plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.optimize.DedupePlugin(),
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false },
+    }),
+    new ExtractTextPlugin({
+      filename: 'style-webpack.css',
+      allChunks: true,
     }),
   ],
 };
