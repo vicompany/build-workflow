@@ -8,18 +8,26 @@ Our main concerns are:
 
 - Task readability and maintainability
 - Task scalability
-- Bundle size
+- Output size
 - Performance (speed of compiling/optimising)
 
 ## Tools
 
-Below are the tools and combinations we wish to test. All of the following combinations should also transpile using Babel, and minify using Uglify. 
+First, we need a tool to define tasks. We have been using Grunt in the past, but we are willing to move on. Options are:
 
-- [x] gulp + browserify
-- [ ] gulp + webpack
-- [x] npm + browserify
-- [x] npm + rollup
-- [x] npm + webpack
+- gulp
+- npm scripts
+
+Secondly, we need to pick tools used in the tasks. Tasks like compiling Sass and optimising images are straightforward. The main focus is building JavaScript bundles.
+
+- [x] npm scripts
+  - [x] browserify
+  - [x] rollup
+  - [x] webpack
+- [x] gulp
+  - [x] browserify
+  - [ ] rollup
+  - [ ] ~~webpack~~ (running webpack via a task runner seems overkill)
 
 ## Usage
 
