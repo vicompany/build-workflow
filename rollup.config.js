@@ -4,7 +4,7 @@ import nodeResolve from 'rollup-plugin-node-resolve';
 import uglify from 'rollup-plugin-uglify';
 
 export default {
-  dest: 'wwwroot/bundle-rollup.js',
+  dest: 'wwwroot/bundle-rollup-npm.js',
   entry: 'Source/scripts/app.js',
   format: 'iife',
   globals: {

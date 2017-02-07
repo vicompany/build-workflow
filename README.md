@@ -26,7 +26,7 @@ Secondly, we need to pick tools used in the tasks. Tasks like compiling Sass and
   - [x] webpack
 - [x] gulp
   - [x] browserify
-  - [ ] rollup
+  - [x] rollup
   - [ ] ~~webpack~~ (running webpack via a task runner seems overkill)
 
 ## Usage

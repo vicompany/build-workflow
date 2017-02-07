@@ -5,7 +5,7 @@ const rename = require('gulp-rename');
 
 // Script
 const browserify = require('browserify');
-const rollup = require('gulp-rollup');
+const rollup = require('rollup-stream');
 // Style
 const autoprefixer = require('gulp-autoprefixer');
 const minifyCss = require('gulp-cssnano');
@@ -47,6 +47,7 @@ gulp.task('browserify:watch', gulp.series('browserify:build', () => {
 gulp.task('rollup:build', () => {
   return rollup(OPTIONS_ROLLUP)
     .pipe(source('app.js'))
+    .pipe(rename('bundle-rollup-gulp.js'))
     .pipe(gulp.dest(DIR_BUILD));
 });
 
@@ -66,6 +67,6 @@ gulp.task('styles', () => {
     .pipe(gulp.dest(DIR_BUILD));
 });
 
-gulp.task('default', gulp.parallel('browserify:build', 'styles'));
+gulp.task('default', gulp.parallel('browserify:build', 'rollup:build', 'styles'));
 
 
