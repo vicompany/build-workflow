@@ -4,10 +4,13 @@ const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
-  entry: path.resolve(__dirname, 'Source/scripts/app-webpack.js'),
+  entry: {
+    'app': path.resolve(__dirname, 'Source/scripts/app-webpack.js'),
+    'other': path.resolve(__dirname, 'Source/scripts/other-bundle.js'),
+  },
   output: {
-    path: path.resolve(__dirname, 'wwwroot'),
-    filename: 'bundle-webpack.js',
+    path: path.resolve(__dirname, 'wwwroot/webpack'),
+    filename: '[name].js',
 
     library: 'app',
     libraryTarget: 'var',
@@ -48,6 +51,7 @@ module.exports = {
   },
 
   plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common'),
     new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compress: { warnings: false },
