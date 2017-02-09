@@ -3,9 +3,9 @@
     "build": "gulp & npm run browserify:build & npm run rollup:build & npm run webpack:build",
     "browserify:build": "browserify -g uglifyify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js",
     "rollup:build": "rollup -c",
-    "rollup:watch": "rollup -cw 'Source/scripts/**/*'",
+    "rollup:watch": "npm run rollup:build -- --watch",
     "webpack:build": "webpack --config webpack.config.js",
-    "webpack:watch": "webpack --config webpack.config.js --watch"
+    "webpack:watch": "npm run webpack:build -- --watch"
   },
   "browserify": {
     "transform": [
