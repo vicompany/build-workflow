@@ -1,4 +1,7 @@
+const path = require('path');
+
 const gulp = require('gulp');
+const merge = require('merge-stream');
 const buffer = require('vinyl-buffer');
 const source = require('vinyl-source-stream');
 const rename = require('gulp-rename');
@@ -45,10 +48,26 @@ gulp.task('browserify:watch', gulp.series('browserify:build', () => {
  ****************************************************************/
 
 gulp.task('rollup:build', () => {
-  return rollup(OPTIONS_ROLLUP)
-    .pipe(source('app.js'))
-    .pipe(rename('bundle-rollup-gulp.js'))
-    .pipe(gulp.dest(DIR_BUILD));
+  const destination = path.join(DIR_BUILD, 'rollup-gulp');
+  const streams = [];
+
+  const bundles = {
+    'app.js': 'Source/scripts/app.js',
+    'other.js': 'Source/scripts/other-bundle.js',
+  };
+
+  Object.keys(bundles).forEach((bundle) => {
+    const entry = bundles[bundle];
+    const options = Object.assign({}, OPTIONS_ROLLUP, { entry });
+
+    const stream = rollup(options)
+      .pipe(source(bundle))
+      .pipe(gulp.dest(destination));
+
+    streams.push(stream);
+  });
+  
+  return merge.apply(null, streams);
 });
 
 

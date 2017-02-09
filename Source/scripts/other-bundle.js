@@ -1,4 +1,6 @@
-import {inc, pipe, negate} from 'ramda';
+import inc from 'ramda/src/pipe';
+import negate from 'ramda/src/pipe';
+import pipe from 'ramda/src/pipe';
 
 class OtherBundle {
   constructor() {
