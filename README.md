@@ -32,3 +32,63 @@ Secondly, we need to pick tools used in the tasks. Tasks like compiling Sass and
 ## Usage
 
 Run `npm run build` to execute _all_ tasks.
+
+## Conclusion
+
+All ratings are on a 1-3 scale.
+
+### npm scripts
+
+Although npm scripts are easy to use, we should be cautious with them. Piping several commands with a handful of arguments quickly gets messy and difficult to interpret.
+
+|             | Rating |
+|-------------|--------|
+| Readability | 1      |
+| Scalability | 2      |
+| Performance | 3      |
+| Total       | 6      |
+
+### Gulp
+
+Gulp proved to be easy to use, easy to scale and it performs quite well.
+
+|             | Rating |
+|-------------|--------|
+| Readability | 3      |
+| Scalability | 3      |
+| Performance | 3      |
+| Total       | 9      |
+
+### Browserify
+
+|             | Rating |
+|-------------|--------|
+| Readability | 2      |
+| Scalability | 3      |
+| Output size | tbd    |
+| Performance | tbd    |
+| Total       | tbd    |
+
+### Rollup
+
+Rollup is a good script bundler. It not very convenient if you want to export multiple bundles.
+
+|             | Rating |
+|-------------|--------|
+| Readability | 2      |
+| Scalability | 2      |
+| Output size | tbd    |
+| Performance | tbd    |
+| Total       | tbd    |
+
+### WebPack
+
+WebPack is a great tool for bundling scripts. Not so great for other assets.
+
+|             | Rating |
+|-------------|--------|
+| Readability | 2      |
+| Scalability | 2      |
+| Output size | tbd    |
+| Performance | tbd    |
+| Total       | tbd    |
