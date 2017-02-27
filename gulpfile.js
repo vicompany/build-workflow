@@ -27,15 +27,25 @@ const DIR_BUILD = 'wwwroot';
  ****************************************************************/
 
 gulp.task('browserify:build', () => {
-  const b = browserify({
-    entries: `${DIR_SOURCE_SCRIPTS}/app-browserify.js`,
-  })
-  .transform('uglifyify', { global: true });
+  const files = [
+    `${DIR_SOURCE_SCRIPTS}/app.js`,
+    `${DIR_SOURCE_SCRIPTS}/other-bundle.js`
+  ];
 
-  return b.bundle()
-    .pipe(source('bundle-browserify-gulp.js'))
-    .pipe(buffer())
-    .pipe(gulp.dest(DIR_BUILD));
+  const destinations = [
+    'app.js',
+    'other.js',
+  ];
+
+  const streams = files.map((entry, index) => {
+    return browserify({ entries: entry })
+      .transform('uglifyify', { global: true })
+      .bundle()
+      .pipe(source(destinations[index]))
+      .pipe(gulp.dest(`${DIR_BUILD}/browserify-gulp`));
+  });
+  
+  return merge.apply(null, streams);
 });
 
 gulp.task('browserify:watch', gulp.series('browserify:build', () => {
