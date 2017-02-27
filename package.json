@@ -1,6 +1,7 @@
 {
   "scripts": {
-    "build": "gulp & npm run browserify:build & npm run rollup:build & npm run webpack:build",
+    "clean": "rimraf wwwroot",
+    "build": "npm run clean && gulp & npm run browserify:build & npm run rollup:build & npm run webpack:build",
     "browserify:build": "browserify -g uglifyify Source/scripts/app-browserify.js -o wwwroot/bundle-browserify-npm.js",
     "rollup:build": "rollup -c -o wwwroot/rollup-npm/app.js Source/scripts/app.js",
     "rollup:watch": "npm run rollup:build -- --watch",
@@ -37,6 +38,7 @@
     "merge-stream": "^1.0.1",
     "node-sass": "^4.5.0",
     "ramda": "^0.22.1",
+    "rimraf": "^2.6.1",
     "rollup": "^0.37.0",
     "rollup-plugin-babel": "^2.7.1",
     "rollup-plugin-commonjs": "^5.0.5",
