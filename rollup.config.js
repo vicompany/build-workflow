@@ -1,11 +1,9 @@
-import babel from 'rollup-plugin-babel';
-import commonJs from 'rollup-plugin-commonjs';
-import nodeResolve from 'rollup-plugin-node-resolve';
-import uglify from 'rollup-plugin-uglify';
+const babel = require('rollup-plugin-babel');
+const commonJs = require('rollup-plugin-commonjs');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const uglify = require('rollup-plugin-uglify');
 
-export default {
-  dest: 'wwwroot/bundle-rollup-npm.js',
-  entry: 'Source/scripts/app.js',
+module.exports = {
   format: 'iife',
   globals: {
     app: 'app',

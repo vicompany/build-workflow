@@ -14,7 +14,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const minifyCss = require('gulp-cssnano');
 const sass = require('gulp-sass');
 
-const OPTIONS_ROLLUP = require('./rollup-gulp.config');
+const OPTIONS_ROLLUP = require('./rollup.config');
 
 const DIR_SOURCE = 'Source';
 const DIR_SOURCE_SCRIPTS = `${DIR_SOURCE}/scripts`;
