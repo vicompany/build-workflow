@@ -61,34 +61,36 @@ Gulp proved to be easy to use, easy to scale and it performs quite well.
 
 ### Browserify
 
-|             | Rating |
-|-------------|--------|
-| Readability | 2      |
-| Scalability | 3      |
-| Output size | tbd    |
-| Performance | tbd    |
-| Total       | tbd    |
+Browserify stood the test of time, but transforms/plugins aren't always up-to-date.
+
+|             | Rating               |
+|-------------|----------------------|
+| Readability | 2                    |
+| Scalability | 2                    |
+| Output size | 2 (14.739kb gzipped) |
+| Performance | 2 (2.968449457s)     |
+| Total       | 8                    |
 
 ### Rollup
 
-Rollup is a good script bundler. It not very convenient if you want to export multiple bundles.
+Rollup is a good script bundler. It is not very convenient if you want to export multiple bundles.
 
-|             | Rating |
-|-------------|--------|
-| Readability | 2      |
-| Scalability | 2      |
-| Output size | tbd    |
-| Performance | tbd    |
-| Total       | tbd    |
+|             | Rating               |
+|-------------|----------------------|
+| Readability | 2                    |
+| Scalability | 3                    |
+| Output size | 3 (13.465kb gzipped) |
+| Performance | 2 (3.253960194s)     |
+| Total       | 10                   |
 
 ### WebPack
 
 WebPack is a great tool for bundling scripts. Not so great for other assets.
 
-|             | Rating |
-|-------------|--------|
-| Readability | 2      |
-| Scalability | 2      |
-| Output size | tbd    |
-| Performance | tbd    |
-| Total       | tbd    |
+|             | Rating               |
+|-------------|----------------------|
+| Readability | 2                    |
+| Scalability | 2                    |
+| Output size | 2 (14.412kb gzipped) |
+| Performance | 3 (2.951653554s)     |
+| Total       | 9                    |
