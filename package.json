@@ -1,11 +1,29 @@
 {
   "scripts": {
     "clean": "rimraf wwwroot && mkdirp wwwroot/browserify-npm",
-    "build": "npm run clean && gulp & npm run browserify:build & npm run rollup:build & npm run webpack:build",
+    "build": "npm run clean && gulp & npm run browserify:build & npm run rollup:build & npm run webpack:build & npm run browserify:build:gulp & npm run rollup:build:gulp",
+
+    "prebrowserify:build": "node ./bin/now.js start browserify",
     "browserify:build": "browserify -g uglifyify Source/scripts/app.js -o wwwroot/browserify-npm/app.js & browserify -g uglifyify Source/scripts/other-bundle.js -o wwwroot/browserify-npm/other.js",
+    "postbrowserify:build": "node ./bin/now.js stop browserify",
+
+    "prebrowserify:build:gulp": "node ./bin/now.js start browserify",
+    "browserify:build:gulp": "gulp browserify:build",
+    "postbrowserify:build:gulp": "node ./bin/now.js stop browserify",
+    
+    "prerollup:build": "node ./bin/now.js start rollup",
     "rollup:build": "rollup -c -o wwwroot/rollup-npm/app.js Source/scripts/app.js & rollup -c -o wwwroot/rollup-npm/other.js Source/scripts/other-bundle.js",
-    "rollup:watch": "npm run rollup:build -- --watch",
+    "postrollup:build": "node ./bin/now.js stop rollup",
+
+    "prerollup:build:gulp": "node ./bin/now.js start rollup",
+    "rollup:build:gulp": "gulp rollup:build",
+    "postrollup:build:gulp": "node ./bin/now.js stop rollup",
+
+    "prewebpack:build": "node ./bin/now.js start webpack",
     "webpack:build": "webpack --config webpack.config.js",
+    "postwebpack:build": "node ./bin/now.js stop webpack",
+
+    "rollup:watch": "npm run rollup:build -- --watch",
     "webpack:watch": "npm run webpack:build -- --watch"
   },
   "browserify": {
@@ -29,12 +47,14 @@
     "browserify": "^13.1.1",
     "css-loader": "^0.26.1",
     "extract-text-webpack-plugin": "^2.0.0-rc.2",
+    "fs-extra": "^2.0.0",
     "gulp": "github:gulpjs/gulp#4.0",
     "gulp-autoprefixer": "^3.1.1",
     "gulp-cssnano": "^2.1.2",
     "gulp-rename": "^1.2.2",
     "gulp-sass": "^3.1.0",
     "gulp-uglify": "^2.0.0",
+    "meow": "^3.7.0",
     "merge-stream": "^1.0.1",
     "mkdirp": "^0.5.1",
     "node-sass": "^4.5.0",
