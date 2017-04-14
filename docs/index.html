@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Build workflow</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/css/theme/night.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.10.0/styles/monokai.min.css">
+
+  <style>
+    .reveal {
+      font-size: 1.75rem;
+    }
+
+    code {
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h1>Build workflow</h1>
+      </section>
+
+      <section>
+        <h2>Onderzoek</h2>
+
+        <ul>
+          <li><strong>npm scripts</strong> vs <strong>gulp</strong></li>
+          <li><strong>browserify</strong> vs <strong>rollup</strong> vs <strong>webpack</strong></li>
+        </ul>
+      </section>
+
+      <section>
+        <section>
+          <h2>npm scripts</h2>
+        </section>
+
+        <section>
+          <h3>Clean</h3>
+          <p>Sommige CLI tools (o.a. browserify) maken geen subdirs aan. Dat moet je soms zelf doen.</p>
+
+          <pre><code class="json">{
+  "scripts": {
+    "clean": "rimraf wwwroot && mkdirp wwwroot/subdir"
+  }
+}</code></pre>
+        </section>
+
+        <section>
+          <h3>Scripts</h3>
+          <p>Input... transforms... output...</p>
+
+          <pre><code class="json">{
+  "scripts": {
+    "build:scripts": "browserify -g uglifyify Source/scripts/app.js -o wwwroot/assets/scripts/app.js & browserify -g uglifyify Source/scripts/other-bundle.js -o wwwroot/assets/scripts/other.js"
+  },
+}</code></pre>
+        </section>
+
+        <section>
+          <h3>Styles</h3>
+          <p>Scherpe kijkers zullen zien dat dit enkel het compilen van Sass is. Dan moet daarna nog autoprefixer, cssnano, etc.</p>
+
+          <pre><code class="json">{
+  "scripts": {
+    "build:styles": "node-sass --include-path node_modules Source/styles/main.scss wwwroot/assets/styles/main.css"
+  },
+}</code></pre>
+        </section>
+
+        <section>
+          <h3>Watch</h3>
+          <p>Zit het ingebouwd in de CLI tool?</p>
+
+          <pre><code class="json">{
+  "scripts": {
+    "watch": "npm run build:scripts -- --watch",
+  },
+}</code></pre>
+        </section>
+
+        <section>
+          <h3>Alles</h3>
+
+          <pre><code class="json">{
+  "scripts": {
+    "clean": "rimraf wwwroot && mkdirp wwwroot/subdir",
+    "build:scripts": "browserify -g uglifyify Source/scripts/app.js -o wwwroot/assets/scripts/app.js & browserify -g uglifyify Source/scripts/other-bundle.js -o wwwroot/assets/scripts/other.js",
+    "build:styles": "node-sass --include-path node_modules Source/styles/main.scss wwwroot/assets/styles/main.css"
+    "watch": "npm run build:scripts -- --watch",
+    "build": "npm run clean && npm run build:scripts && npm run build:styles"
+  },
+}</code></pre>
+        </section>
+
+        <section>
+          <h3>Opmerkingen</h3>
+
+          <ul>
+            <li>Dingen parallel draaien? <a href="https://www.npmjs.com/package/concurrently">concurrently</a></li>
+            <li>Dingen watchen als een CLI tool dat niet ondersteunt? <a href="https://www.npmjs.com/package/watch">watch</a></li>
+            <li>Moeilijk met if/else a.d.h.v. environment variabelen, maar daar is vast ook een module voor</li>
+          </ul>
+        </section>
+
+        <section>
+          <h3>Conclusie</h3>
+
+          <ul>
+            <li>💩 Leesbaarheid is meh voor grotere projecten</li>
+            <li>😐 Schaalbaarheid hangt af van beschikbaarheid CLI tools en hoe makkelijk die te combineren zijn</li>
+            <li>🤘 Performance is top</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Gulp</h2>
+        </section>
+
+        <section>
+          <h3>Clean</h3>
+          <pre><code class="js">gulp.task('clean', () => del('wwwroot'));</code></pre>
+        </section>
+
+        <section>
+          <h3>Scripts</h3>
+          <p>Meerdere bundels via configuratie ondersteunt Rollup niet, dus daar is extra script voor nodig:</p>
+
+          <pre><code class="js">gulp.task('scripts', () => {
+  const destination = path.join(DIR_BUILD, 'wwwroot/assets/scripts');
+  const streams = [];
+
+  const bundles = {
+    'app.js': 'Source/scripts/app.js',
+    'other.js': 'Source/scripts/other-bundle.js',
+  };
+
+  Object.keys(bundles).forEach((bundle) => {
+    const entry = bundles[bundle];
+    const options = Object.assign({}, OPTIONS_ROLLUP, { entry });
+
+    const stream = rollup(options)
+      .pipe(source(bundle))
+      .pipe(gulp.dest(destination));
+
+    streams.push(stream);
+  });
+
+  return merge.apply(null, streams);
+});</code></pre>
+        </section>
+
+        <section>
+          <h3>Styles</h3>
+
+          <pre><code class="js">gulp.task('styles', () => {
+  return gulp.src('Source/styles/**/*.scss')
+    .pipe(sass())
+    .pipe(autoprefixer())
+    .pipe(cssnano())
+    .pipe(gulp.dest('wwwroot/assets/styles'));
+});</code></pre>
+        </section>
+
+        <section>
+          <h3>Watch</h3>
+
+          <pre><code class="js">gulp.task('watch', () => {
+  gulp.watch('Source/scripts/**/*.js', ['scripts']);
+  gulp.watch('Source/styles/**/*.js', ['styles']);
+});</code></pre>
+        </section>
+
+        <section>
+          <h3>Alles</h3>
+
+          <pre><code class="js">const gulp = require('gulp');
+const runSequence = require('run-sequence');
+
+gulp.task('clean', require('bin/build/clean.js'));
+gulp.task('scripts', require('bin/build/scripts.js'));
+gulp.task('styles', require('bin/build/styles.js'));
+gulp.task('watch', require('bin/build/watch.js'));
+
+gulp.task('build', (done) => {
+  runSequence('clean', ['scripts', 'styles'], done);
+});
+
+gulp.task('default', ['build']);</code></pre>
+        </section>
+
+        <section>
+          <h3>Conclusie</h3>
+
+          <ul>
+            <li>🤘 Leesbaarheid is prima</li>
+            <li>🤘 Schaalbaarheid is goed (plugin, <code>Promise</code> of callback)</li>
+            <li>🤘 Performance is top</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Browserify</h2>
+          <p>Good ol' browserify.</p>
+        </section>
+
+        <section>
+          <pre><code class="js">gulp.task('scripts', () => {
+  const files = [
+    `${DIR_SOURCE_SCRIPTS}/app.js`,
+    `${DIR_SOURCE_SCRIPTS}/other-bundle.js`
+  ];
+
+  const destinations = [
+    'app.js',
+    'other.js',
+  ];
+
+  const streams = files.map((entry, index) => {
+    return browserify({ entries: entry })
+      .transform('uglifyify', { global: true })
+      .bundle()
+      .pipe(source(destinations[index]))
+      .pipe(gulp.dest(`${DIR_BUILD}/browserify-gulp`));
+  });
+
+  return merge.apply(null, streams);
+});</code></pre>
+        </section>
+
+        <section>
+          <ul>
+            <li>🤘 Leesbaarheid (CLI & Gulp, Grunt is wel crap)</li>
+            <li>💩 Schaalbaarheid, want eindeloze lijst aan outdated plugins (Uglifyify, Babelify, Watchify, *ify)</li>
+            <li>💩 Grootste bundel</li>
+            <li>😐 Performance</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>Rollup</h2>
+        </section>
+
+        <section>
+          <pre><code class="js">const babel = require('rollup-plugin-babel');
+const commonJs = require('rollup-plugin-commonjs');
+const nodeResolve = require('rollup-plugin-node-resolve');
+const uglify = require('rollup-plugin-uglify');
+
+module.exports = {
+  format: 'iife',
+  globals: {
+    app: 'app',
+  },
+  moduleName: 'app',
+  plugins: [
+    nodeResolve(),
+    commonJs(),
+    babel({
+      exclude: 'node_modules/**',
+      presets: [
+        ["latest", { es2015: { modules: false } }],
+      ],
+      plugins: ["external-helpers"]
+    }),
+    uglify(),
+  ],
+};</code></pre>
+        </section>
+
+        <section>
+          <ul>
+            <li>🤘 Leesbaarheid</li>
+            <li>😐 Schaalbaarheid</li>
+            <li>🤘 Kleinste bundels</li>
+            <li>💩 Het traagst</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h2>WebPack</h2>
+        </section>
+
+        <section>
+          <pre><code class="js">const path = require('path');
+const webpack = require('webpack');
+
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+module.exports = {
+  entry: {
+    'app': path.resolve(__dirname, 'Source/scripts/app-webpack.js'),
+    'other': path.resolve(__dirname, 'Source/scripts/other-bundle.js'),
+  },
+  output: {
+    path: path.resolve(__dirname, 'wwwroot/webpack'),
+    filename: '[name].js',
+
+    library: 'app',
+    libraryTarget: 'var',
+  },
+
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: 'babel-loader',
+        options: {
+          presets: [
+            ['latest', {
+              es2015: {
+                // Disable module to enable tree shaking
+                // http://www.2ality.com/2015/12/webpack-tree-shaking.html
+                "transform-es2015-modules-commonjs": false,
+              }
+            }],
+          ],
+        },
+      },
+
+      {
+        test: /\.scss*/,
+        // https://webpack.github.io/docs/stylesheets.html#styles-from-initial-chunks-into-separate-css-output-file
+        use: ExtractTextPlugin.extract([{
+          loader: 'css-loader',
+          options: {
+            minimize: true,
+          },
+        }, {
+          loader: 'sass-loader',
+        }]),
+      },
+    ],
+  },
+
+  plugins: [
+    new webpack.optimize.CommonsChunkPlugin('common'),
+    new webpack.optimize.OccurrenceOrderPlugin(),
+    new webpack.optimize.UglifyJsPlugin({
+      compress: { warnings: false },
+    }),
+    new ExtractTextPlugin({
+      filename: 'style-webpack.css',
+      allChunks: true,
+    }),
+  ],
+};</code></pre>
+        </section>
+
+        <section>
+          <ul>
+            <li>😐 Leesbaarheid is goed, maar wel een configuratie hell</li>
+            <li>😐 Schaalbaarheid</li>
+            <li>🤘 Bundel grootte</li>
+            <li>🤘 Het snelst</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <h2>Disclaimers</h2>
+        <ul>
+          <li>Verschil van bundel grootte is verwaarloosbaar</li>
+          <li>Verschil van performance is ook verwaarloosbaar</li>
+          <li>Webpack heeft meer slimmigheden voor scripts, zoals het bundelen van een <code>common.js</code></li>
+          <li>Rollup en Webpack kunnen beiden ook dingen zoals components (HTML, JS en CSS in één) compilen</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Conclusie</h2>
+        <p>It depends™</p>
+
+        <ul>
+          <li>npm scripts zijn cool, maar overzicht is snel kwijt, dus handig voor kleine projecten (libraries e.d.)</li>
+          <li>gulp is overzichtelijker voor grotere projecten</li>
+
+          <li>Browserify is meh</li>
+          <li>Rollup is beter</li>
+          <li>Webpack is iets lastiger te configureren, maar heeft net wat geavanceerdere tools</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/js/reveal.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/3.4.1/plugin/highlight/highlight.min.js"></script>
+  <script>
+    Reveal.initialize();
+    hljs.initHighlightingOnLoad();
+  </script>
+</body>
+
+</html>
